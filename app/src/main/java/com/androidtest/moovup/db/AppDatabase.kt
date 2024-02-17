@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.androidtest.moovup.db.dao.PeopleDao
 import com.androidtest.moovup.db.model.People
+import com.androidtest.moovup.util.CoroutineUtil
 
 @Database(
     entities = [
@@ -20,7 +21,7 @@ abstract class AppDatabase: RoomDatabase() {
         var instance: AppDatabase? = null
 
         fun createDatabase(context: Context): AppDatabase {
-            if (instance != null) {
+            if (instance == null) {
                 instance = Room.databaseBuilder(
                     context,
                     AppDatabase::class.java,
@@ -34,4 +35,13 @@ abstract class AppDatabase: RoomDatabase() {
     }
 
     abstract fun peopleDao(): PeopleDao
+
+    fun getPeopleList(callback: ((List<People>) -> Unit)) {
+        CoroutineUtil.io {
+            val peopleList = peopleDao().getPeopleList()
+            CoroutineUtil.main {
+                callback(peopleList)
+            }
+        }
+    }
 }

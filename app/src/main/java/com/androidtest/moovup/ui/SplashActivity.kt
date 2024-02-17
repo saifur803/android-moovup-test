@@ -4,10 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import com.androidtest.moovup.R
 import com.androidtest.moovup.api.ApiClient
 import com.androidtest.moovup.databinding.ActivitySplashBinding
-import com.androidtest.moovup.ui.list.PeopleListActivity
+import com.androidtest.moovup.ui.main.MainActivity
 import com.androidtest.moovup.util.UIUtil
 
 class SplashActivity : AppCompatActivity() {
@@ -34,13 +33,13 @@ class SplashActivity : AppCompatActivity() {
                 return@fetchPeopleList
             }
 
-            goToPeopleListActivity()
+            openMainActivity()
         }
     }
 
-    private fun goToPeopleListActivity() {
+    private fun openMainActivity() {
         startActivity(
-            Intent(this, PeopleListActivity::class.java)
+            Intent(this, MainActivity::class.java)
         )
     }
 

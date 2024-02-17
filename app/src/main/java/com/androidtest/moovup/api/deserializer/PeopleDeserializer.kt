@@ -10,26 +10,21 @@ import java.lang.reflect.Type
 
 class PeopleTypeAdapter(val delegate: JsonAdapter<People>): JsonAdapter<People>() {
 
-    companion object {
-        fun createFactory(): Factory {
-            return object : Factory {
-                override fun create(
-                    type: Type,
-                    annotations: MutableSet<out Annotation>,
-                    moshi: Moshi
-                ): JsonAdapter<*>? {
-                    if (Types.getRawType(type) == People::class.java) {
-                        val delegate = moshi.nextAdapter<People>(this, type, annotations)
-                        return PeopleTypeAdapter(delegate)
-                    }
-                    return null
-                }
-
+    object Factory : JsonAdapter.Factory {
+        override fun create(
+            type: Type,
+            annotations: MutableSet<out Annotation>,
+            moshi: Moshi
+        ): JsonAdapter<*>? {
+            if (Types.getRawType(type) == People::class.java) {
+                val delegate = moshi.nextAdapter<People>(this, type, annotations)
+                return PeopleTypeAdapter(delegate)
             }
+            return null
         }
     }
 
-    override fun fromJson(reader: JsonReader): People? {
+    override fun fromJson(reader: JsonReader): People {
         var id: String = ""
         var email: String = ""
         var picture: String = ""
@@ -60,6 +55,8 @@ class PeopleTypeAdapter(val delegate: JsonAdapter<People>): JsonAdapter<People>(
                            }
                            "last" -> {
                                lastName = reader.nextString()
+                           } else -> {
+                               reader.skipValue()
                            }
                        }
                     }
@@ -68,16 +65,27 @@ class PeopleTypeAdapter(val delegate: JsonAdapter<People>): JsonAdapter<People>(
                 "location" -> {
                     reader.beginObject()
                     while (reader.hasNext()) {
+                        if (reader.peek() == JsonReader.Token.NULL) {
+                            reader.skipValue()
+                            continue
+                        }
+
                         when (reader.nextName()) {
                             "latitude" -> {
-                                latitude = reader.nextDouble()
+                                if (reader.peek() != JsonReader.Token.NULL) {
+                                    latitude = reader.nextDouble()
+                                }
                             }
-                            "last" -> {
-                                longitude = reader.nextDouble()
+                            "longitude" -> {
+                                if (reader.peek() != JsonReader.Token.NULL) {
+                                    longitude = reader.nextDouble()
+                                }
                             }
                         }
                     }
                     reader.endObject()
+                } else -> {
+                    reader.skipValue()
                 }
             }
         }

@@ -32,14 +32,14 @@ class ApiClient(val context: Context) {
         }
 
         val moshi = Moshi.Builder().run {
-            add(PeopleTypeAdapter.createFactory())
+            add(PeopleTypeAdapter.Factory)
             build()
         }
 
         apiInterface = Retrofit.Builder().run {
             baseUrl("https://api.json-generator.com/")
-            client(client)
             addConverterFactory(MoshiConverterFactory.create(moshi))
+            client(client)
             build()
         }.create(ApiInterface::class.java)
     }
