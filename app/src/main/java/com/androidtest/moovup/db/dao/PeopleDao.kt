@@ -14,6 +14,9 @@ abstract class PeopleDao {
     @Query("SELECT * FROM PEOPLE")
     abstract suspend fun getPeopleList(): List<People>
 
+    @Query("SELECT * FROM PEOPLE WHERE id = :id")
+    abstract suspend fun getPeopleById(id: String): People
+
     @Query("DELETE FROM PEOPLE")
     abstract suspend fun deletePeopleList()
 }

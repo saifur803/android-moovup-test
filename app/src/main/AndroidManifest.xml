@@ -16,6 +16,14 @@
         android:theme="@style/Theme.Moovup"
         tools:targetApi="31">
         <activity
+            android:name=".ui.map.PeopleDetailActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA8tuTnenpJgVdW3MMbbKC195aAJpq8XZU" />
+
+        <activity
             android:name=".ui.map.MapFragment"
             android:exported="false" />
         <activity
@@ -23,7 +31,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

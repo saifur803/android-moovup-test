@@ -1,6 +1,7 @@
 package com.androidtest.moovup.ui.list
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import com.androidtest.moovup.R
 import com.androidtest.moovup.databinding.ViewholderPeopleBinding
 import com.androidtest.moovup.db.AppDatabase
 import com.androidtest.moovup.db.model.People
+import com.androidtest.moovup.ui.map.MapFragment
+import com.androidtest.moovup.ui.map.PeopleDetailActivity
 
 class PeopleListAdapter(val context: Context):
     RecyclerView.Adapter<PeopleListAdapter.ViewHolder>() {
@@ -36,7 +39,15 @@ class PeopleListAdapter(val context: Context):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val people = peopleList[position]
 
-        holder.binding.peopleTitleTextView.text = "${people.firstName} ${people.lastName}"
+        holder.binding.peopleTitleTextView.text = String.format(
+            "%s %s", people.firstName, people.lastName
+        )
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, PeopleDetailActivity::class.java)
+            intent.putExtra(MapFragment.PEOPLE_ID, people.id)
+            context.startActivity(intent)
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

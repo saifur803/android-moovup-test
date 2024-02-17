@@ -41,6 +41,7 @@ class SplashActivity : AppCompatActivity() {
         startActivity(
             Intent(this, MainActivity::class.java)
         )
+        finish()
     }
 
     private fun showErrorDialog() {

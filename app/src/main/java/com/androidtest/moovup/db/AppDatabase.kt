@@ -44,4 +44,13 @@ abstract class AppDatabase: RoomDatabase() {
             }
         }
     }
+
+    fun getPeopleById(id: String, callback: ((People) -> Unit)) {
+        CoroutineUtil.io {
+            val people = peopleDao().getPeopleById(id)
+            CoroutineUtil.main {
+                callback(people)
+            }
+        }
+    }
 }
